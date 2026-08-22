@@ -38,7 +38,7 @@ reportsRouter.post("/generate", async (req, res) => {
  const snapshotJson = JSON.parse(JSON.stringify({ company, dashboard, radar, decision, generatedAt: new Date().toISOString() }));
     const report = await prisma.report.create({
     data: { companyId, generatedById: req.auth!.sub, snapshotJson },
-  });
+  }); 
 
   const fileUrl = await generateReportPdf(report.id, snapshotJson);
   const updated = await prisma.report.update({ where: { id: report.id }, data: { fileUrl } });
