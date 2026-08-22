@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-palha text-ink antialiased;
+  }
+  h1, h2, h3 {
+    @apply font-display text-mata;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white border border-border rounded-card shadow-card p-6;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-pasto text-white font-medium px-4 py-2.5
+           hover:bg-pasto-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-white text-ink font-medium px-4 py-2.5
+           hover:bg-palha-alt transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .field-label {
+    @apply block text-sm font-medium text-ink-soft mb-1.5;
+  }
+  .field-input {
+    @apply w-full rounded-lg border border-border bg-white px-3.5 py-2.5 text-ink placeholder:text-ink-faint
+           focus:outline-none focus:ring-2 focus:ring-pasto/40 focus:border-pasto transition-shadow;
+  }
+}
+
+/* Linha "horizonte de plantio" — elemento de assinatura usado com parcimônia
+   no login e no topo do Dashboard Inicial. */
+.growth-line {
+  height: 3px;
+  background: linear-gradient(90deg, #35603f 0%, #c08a2e 55%, #35603f 100%);
+  background-size: 200% 100%;
+  border-radius: 999px;
+  animation: growth-shift 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .growth-line { animation: none; }
+}
+
+@keyframes growth-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
