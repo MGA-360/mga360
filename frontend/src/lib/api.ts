@@ -56,7 +56,25 @@ function clearSessionAndRedirect() {
   }
 }
 
+// Admin operando em nome de um cliente: guarda o companyId da URL e o anexa
+// em todas as chamadas à API (exceto /auth).
+function withAdminCompany(path: string): string {
+  if (typeof window === "undefined" || path.startsWith("/auth")) return path;
+  try {
+    const user = JSON.parse(window.localStorage.getItem("mga360_user") || "null");
+    if (user?.role !== "ADMIN") return path;
+    const fromUrl = new URLSearchParams(window.location.search).get("companyId");
+    if (fromUrl) window.sessionStorage.setItem("mga360_admin_company", fromUrl);
+    const companyId = fromUrl || window.sessionStorage.getItem("mga360_admin_company");
+    if (!companyId || /[?&]companyId=/.test(path)) return path;
+    return path + (path.includes("?") ? "&" : "?") + "companyId=" + encodeURIComponent(companyId);
+  } catch {
+    return path;
+  }
+}
+
 async function request<T>(path: string, options: RequestInit = {}, isRetry = false): Promise<T> {
+  path = withAdminCompany(path);
   const token = getAccessToken();
 
   const res = await fetch(`${API_URL}${path}`, {
